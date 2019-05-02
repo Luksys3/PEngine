@@ -1,7 +1,7 @@
 class MObject {
-    private String _id;
+    protected String _id;
     private Client _client;
-    private PVector _position;
+    protected PVector _position;
 
     MObject(Client client, int x, int y) {
         _id = getSaltString();
@@ -11,54 +11,19 @@ class MObject {
         // println("MObject init");
     }
 
-    void update() {
-        draw();
-    }
-
-    void keyPressed(char key) {
-        switch (key) {
-            case 'a':
-                _position.x -= 10;
-                break;
-            
-            case 'd':
-                _position.x += 10;
-                break;
-
-            case 'w':
-                _position.y -= 10;
-                break;
-
-            case 's':
-                _position.y += 10;
-                break;
-            
-            default:
-                return;
-        }
-
-        send();
-    }
+    void update() {}
 
     void setPosition(PVector position) {
         _position = position;
     }
 
-    private void draw() {
-        pushStyle();
-        pushMatrix();
-
-        strokeWeight(0);
-        fill(200);
-        translate(_position.x, _position.y);
-        ellipse(-10, -10, 20, 20);
-
-        popMatrix();
-        popStyle();
-    }
-
-    private void send() {
-        _client.write(_id +":"+ _position.x +":"+ _position.y +"|");
+    /*private*/ protected void send() {
+        _client.write(
+            _id +":"+
+            _position.x +":"+
+            _position.y +":"+
+            "Player" +"|"
+        );
     }
 }
 

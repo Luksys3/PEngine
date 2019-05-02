@@ -1,13 +1,15 @@
 import processing.net.*;
 import java.util.Map;
 
+// String IPADDRESS = "127.0.0.1";
+String IPADDRESS = "192.168.3.28";
+int PORT         = 5204;
+
 Server server;
-int val = 0;
 
 void setup() {
 	size(200, 140);
-	//frameRate(5);
-	server = new Server(this, 5204, "localhost");
+	server = new Server(this, PORT, IPADDRESS);
 }
 
 // TODO: dont send real clients ids. Map them with server created other ids
@@ -22,13 +24,12 @@ void draw() {
         String rawMessage = thisClient.readString();
         if (rawMessage != null) {
             String[] messages = split(rawMessage, '|');
-            println("Message count: "+ (messages.length - 1));
             
             for (String message : messages) {
                 // TODO: validate message for it to be safely sent to clients
 
                 if (!message.isEmpty()) {
-                    println("Client: "+ message);
+                    println("Message ("+ (messages.length - 1) +") ["+ thisClient.ip() +"]: "+ message);
                     server.write(message +"|");
                 }
             }

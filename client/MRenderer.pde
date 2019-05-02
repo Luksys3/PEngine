@@ -1,7 +1,7 @@
 import java.util.Map;
 
 class MRenderer {
-    private Client _client;
+    protected Client _client;
     private HashMap<String, MObject> _objects = new HashMap<String, MObject>();
 
     MRenderer(Client client) {
@@ -37,12 +37,17 @@ class MRenderer {
             Float.parseFloat(data[1]),
             Float.parseFloat(data[2])
         );
+        String type = data[3];
 
         if (!_objects.containsKey(id)) {
-            _objects.put(
-                id,
-                new MObject(_client, Math.round(position.x), Math.round(position.y))
-            );
+            // new Player(_client, Math.round(position.x), Math.round(position.y))
+            MObject newObject = createObject(type, Math.round(position.x), Math.round(position.y));
+            if (Objects.equals(newObject, null)) {
+                println("NOPE");
+                return;
+            }
+
+            _objects.put(id, newObject);
         }
 
         _objects.get(id).setPosition(position);
@@ -50,5 +55,9 @@ class MRenderer {
         // println("Client - "+ id);
         // println("  pos: "+ position.x +" "+ position.y);
         // println("");
+    }
+
+    protected MObject createObject(String type, int x, int y) {
+        return null;
     }
 }
