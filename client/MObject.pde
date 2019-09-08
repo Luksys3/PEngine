@@ -9,6 +9,11 @@ class MObject {
         _position = new PVector(x, y);
 
         // println("MObject init");
+        // _client.write("OI:"+ _id +"|");
+        // TODO: yra issue. Kai sukuria renderer nauja object
+        //      tai constuctorius nusiunica serveriui OI kas 
+        //      neturetu buti. Turi siust IO kai object yra
+        //      ne shadow (yra sukurtas ne pagal server message)
     }
 
     void update() {}
@@ -19,10 +24,11 @@ class MObject {
 
     /*private*/ protected void send() {
         _client.write(
+            "RN:"+
             _id +":"+
-            _position.x +":"+
-            _position.y +":"+
-            "Player" +"|"
+            "Player" +":"+
+            int(_position.x) +":"+
+            int(_position.y) +"|"
         );
     }
 }

@@ -9,39 +9,24 @@ class MRenderer {
     }
 
     void update() {
-        if (_client.available() > 0) {
-            String rawMessage = _client.readString();
-            if (rawMessage != null) {
-                String[] messages = split(rawMessage, '|');
-                println("Message count: "+ (messages.length - 1));
-                
-                for (String message : messages) {
-                    if (!message.isEmpty()) {
-                        _decodeMessage(message);
-                    }
-                }
-            }
-        }
-
         for (Map.Entry pair : _objects.entrySet()) {
             _objects.get(pair.getKey()).update();
         }
     }
 
-    private void _decodeMessage(String message) {
-        println("Client - "+ message);
+    void executeMessage(PMessage message) {
+        String[] data = message.getData();
 
-        String[] data = split(message, ':');
-        String id = data[0];
+        String id = data[1];
+        String objectType = data[2];
         PVector position = new PVector(
-            Float.parseFloat(data[1]),
-            Float.parseFloat(data[2])
+            float(data[3]),
+            float(data[4])
         );
-        String type = data[3];
 
         if (!_objects.containsKey(id)) {
             // new Player(_client, Math.round(position.x), Math.round(position.y))
-            MObject newObject = createObject(type, Math.round(position.x), Math.round(position.y));
+            MObject newObject = createObject(objectType, Math.round(position.x), Math.round(position.y));
             if (Objects.equals(newObject, null)) {
                 println("NOPE");
                 return;
@@ -51,10 +36,6 @@ class MRenderer {
         }
 
         _objects.get(id).setPosition(position);
-
-        // println("Client - "+ id);
-        // println("  pos: "+ position.x +" "+ position.y);
-        // println("");
     }
 
     protected MObject createObject(String type, int x, int y) {

@@ -1,21 +1,21 @@
 import processing.net.*;
 
-// String IPADDRESS = "127.0.0.1";
+String IPADDRESS = "127.0.0.1";
 // String IPADDRESS = "192.168.3.28";
-String IPADDRESS = "78.62.195.219";
+// String IPADDRESS = "78.62.195.219";
 int PORT         = 5204;
 
 Client client;
 
 Player player;
-Renderer renderer;
+PEngine pEngine;
 
 void setup() {
     size(600, 560);
 
     client = new Client(this, IPADDRESS, PORT);
 
-    renderer = new Renderer(client);
+    pEngine = new PEngine(client, new Renderer(client));
     player = new Player(client, 200, 70);
 }
 
@@ -23,7 +23,7 @@ void draw() {
     background(150);
 
     player.update();
-    renderer.update();
+    pEngine.update();
     
     // if (client.available() > 0) {
     //     String dataIn = client.readString();
